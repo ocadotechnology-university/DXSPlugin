@@ -24,6 +24,7 @@
     "@backstage/plugin-app-backend": "^0.3.58",
     "@backstage/plugin-auth-backend": "^0.21.0",
     "@backstage/plugin-auth-node": "^0.4.4",
+    "@backstage/plugin-bazaar-backend": "^0.3.14",
     "@backstage/plugin-catalog-backend": "^1.17.0",
     "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "^0.1.7",
     "@backstage/plugin-permission-common": "^0.7.12",
@@ -36,13 +37,14 @@
     "@backstage/plugin-search-backend-module-techdocs": "^0.1.14",
     "@backstage/plugin-search-backend-node": "^1.2.14",
     "@backstage/plugin-techdocs-backend": "^1.9.3",
+    "@internal/backstage-plugin-dxs-backend-backend": "^0.1.0",
     "app": "link:../app",
     "better-sqlite3": "^9.0.0",
     "dockerode": "^3.3.1",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "node-gyp": "^9.0.0",
-    "pg": "^8.11.3",
+    "pg": "^8.11.5",
     "winston": "^3.2.1"
   },
   "devDependencies": {
