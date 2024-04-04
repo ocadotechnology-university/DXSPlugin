@@ -58,6 +58,9 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
+import { EntityBazaarInfoCard, isBazaarAvailable } from '@backstage/plugin-bazaar';
+import { DxsPage } from '@internal/backstage-plugin-dxs';
+
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -127,6 +130,13 @@ const overviewContent = (
     <Grid item md={6}>
       <EntityAboutCard variant="gridItem" />
     </Grid>
+    <EntitySwitch>
+     <EntitySwitch.Case if={isBazaarAvailable}>
+       <Grid item sm={6}>
+         <EntityBazaarInfoCard />
+       </Grid>
+     </EntitySwitch.Case>
+    </EntitySwitch>
     <Grid item md={6} xs={12}>
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
@@ -307,6 +317,9 @@ const groupPage = (
           <EntityLinksCard />
         </Grid>
       </Grid>
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/dxs" title="Team Healthcheck">
+      <DxsPage />
     </EntityLayout.Route>
   </EntityLayout>
 );
