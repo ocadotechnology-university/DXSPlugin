@@ -14,21 +14,14 @@ import { ExampleFetchComponent } from '../ExampleFetchComponent';
 export const ExampleComponent = () => (
   <Page themeId="tool">
     <Header title="Welcome to dxs!" subtitle="Optional subtitle">
-      <HeaderLabel label="Owner" value="Team X" />
+      <HeaderLabel label="Owner" value="Ocado Technology" />
       <HeaderLabel label="Lifecycle" value="Alpha" />
     </Header>
     <Content>
-      <ContentHeader title="Plugin title">
+      <ContentHeader title="Team Healthcheck">
         <SupportButton>A description of your plugin goes here.</SupportButton>
       </ContentHeader>
       <Grid container spacing={3} direction="column">
-        <Grid item>
-          <InfoCard title="Information card">
-            <Typography variant="body1">
-              All content should be wrapped in a card like this.
-            </Typography>
-          </InfoCard>
-        </Grid>
         <Grid item>
           <ExampleFetchComponent />
         </Grid>
