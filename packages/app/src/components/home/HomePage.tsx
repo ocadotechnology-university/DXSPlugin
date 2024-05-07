@@ -14,6 +14,6 @@ export const HomePage = () => (
 
     <Grid item xs={12} >
         <BazaarOverviewCard title='My Orgs Projects' order='random' fullWidth fullHeight />
-+   </Grid>
+   </Grid>
   </Grid>
 );

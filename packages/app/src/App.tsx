@@ -33,11 +33,12 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+import { DxsPage } from '@internal/backstage-plugin-dxs';
 
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { HomePage } from './components/home/HomePage';
 import { BazaarPage } from '@backstage/plugin-bazaar';
-import { DxsPage } from '@internal/backstage-plugin-dxs';
+import { SurveyPage, Question } from '@internal/backstage-plugin-dxs/src/components/ExampleComponent/ExampleComponent';
 
 
 const app = createApp({
@@ -103,6 +104,9 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/dxs" element={<DxsPage />} />
+    <Route path="/dxspage/:surveyid/:questionid" element={<SurveyPage/>}>
+    <Route index element={<Question surveyid={undefined} questionid={undefined} />} />
+    </Route>
   </FlatRoutes>
 );
 

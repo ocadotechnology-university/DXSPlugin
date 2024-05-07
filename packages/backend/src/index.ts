@@ -33,6 +33,7 @@ import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
 
 import bazaar from './plugins/bazaar';
+import dxs from './plugins/dxs';
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -88,6 +89,7 @@ async function main() {
   const techdocsEnv = useHotMemoize(module, () => createEnv('techdocs'));
   const searchEnv = useHotMemoize(module, () => createEnv('search'));
   const appEnv = useHotMemoize(module, () => createEnv('app'));
+  const dxsEnv = useHotMemoize(module, () => createEnv('dxs'));
 
   const apiRouter = Router();
   apiRouter.use('/bazaar', await bazaar(bazaarEnv));
@@ -97,6 +99,7 @@ async function main() {
   apiRouter.use('/techdocs', await techdocs(techdocsEnv));
   apiRouter.use('/proxy', await proxy(proxyEnv));
   apiRouter.use('/search', await search(searchEnv));
+  apiRouter.use('/dxs', await dxs(dxsEnv));
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
   apiRouter.use(notFoundHandler());
