@@ -33,12 +33,6 @@ import {
       this.client = client;
     }
   
-    private columns = [
-      'metadata.id',
-      'metadata.status',
-      'metadata.date',
-    ];
-  
     async createSurvey(id: number, teamId: string, Date: string) {
       return await this.client('surveys').insert({
         survey_id: id,
@@ -89,7 +83,7 @@ import {
     async getSurvey(surveyid: string) { 
       try {
         
-        const questions = await this.client.select('*').from('answers').where({ answer_id: `${surveyid}` });
+        const questions = await this.client.select('*').from('answers').where({ survey_id: `${surveyid}` });
         return questions;
       } catch (error) {
           console.error('Error fetching questions:', error);
@@ -101,7 +95,7 @@ import {
     try {  
         const questions = await this.client.select('*')
                                            .from('answers')
-                                           .where({ answer_id: surveyid, question_id: questionid });
+                                           .where({ survey_id: surveyid, question_id: questionid });
         return questions;
     } catch (error) {
         console.error('Error fetching questions:', error);

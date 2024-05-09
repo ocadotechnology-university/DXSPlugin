@@ -94,7 +94,7 @@ const DxsProxyComponent = () => {
         date: singleData.date,
         team_id: singleData.team_id,
         };
-    });
+    }).sort((a, b) => new Date(b.date) - new Date(a.date));
     
 
     return (
@@ -181,19 +181,17 @@ export const Question = ({ surveyid, questionid }) => {
 
   const goToNextQuestion = () => {
     const nextQuestionId = parseInt(questionid) + 1; // Increment questionid
-    const nextSurveyId = parseInt(surveyid) + 1;
     if (nextQuestionId <= 31) { // Ensure questionid stays within the range
-      fetchData(nextSurveyId, nextQuestionId.toString()); // Fetch data for the next question
-      navigate(`/dxspage/${nextSurveyId}/${nextQuestionId}`); // Navigate to the next question page
+      fetchData(surveyid, nextQuestionId.toString()); // Fetch data for the next question
+      navigate(`/dxspage/${surveyid}/${nextQuestionId}`); // Navigate to the next question page
     }
   };
 
   const goToPreviousQuestion = () => {
     const previousQuestionId = parseInt(questionid) - 1; // Decrement questionid
-    const previousSurveyId = parseInt(surveyid) - 1;
     if (previousQuestionId > 0) { // Ensure questionid stays within the range
-      fetchData(previousSurveyId, previousQuestionId.toString()); // Fetch data for the previous question
-      navigate(`/dxspage/${previousSurveyId}/${previousQuestionId}`); // Navigate to the previous question page
+      fetchData(surveyid, previousQuestionId.toString()); // Fetch data for the previous question
+      navigate(`/dxspage/${surveyid}/${previousQuestionId}`); // Navigate to the previous question page
     }
   };
 
