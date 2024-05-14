@@ -13,8 +13,6 @@ export interface RouterOptions {
   identity: IdentityApi;
 }
 
-
-
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
@@ -28,7 +26,9 @@ export async function createRouter(
     logger.info('PONG!');
     response.send({ status: 'ok' });
   });
-  router.get('/order66', async (_, response) => { 
+
+  //surveys
+  router.get('/surveys', async (_, response) => { 
     try {
         const surveyTable = await dbHandler.getSurveys();
         response.send(surveyTable);
@@ -39,7 +39,8 @@ export async function createRouter(
     }
 });
 
-router.get('/teamname', async (_, response) => { /*to gowno odbiera zapytanie i robi robote*/
+//team names
+router.get('/teamname', async (_, response) => {
     try {
         const surveyTable = await dbHandler.getTeamNames();
         response.send(surveyTable);
@@ -50,13 +51,14 @@ router.get('/teamname', async (_, response) => { /*to gowno odbiera zapytanie i 
     }
 });
 
-// SURVEY ID IS AN ANSWER ID AS WELL
+  //survey id
   router.get('/dxspage/:surveyid', async (request, response) => {
     const {surveyid} = request.params;
     const value = await dbHandler.getSurvey(surveyid);
     response.send({response: value });
   });
 
+  //survey's question id user important data
   router.get('/dxspage/:surveyid/:questionid', async (request, response) => {
     try{
       const {surveyid, questionid} = request.params;
