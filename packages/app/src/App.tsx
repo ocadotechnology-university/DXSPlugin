@@ -38,7 +38,8 @@ import { DxsPage } from '@internal/backstage-plugin-dxs';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { HomePage } from './components/home/HomePage';
 import { BazaarPage } from '@backstage/plugin-bazaar';
-import { SurveyPage, Question } from '@internal/backstage-plugin-dxs/src/components/ExampleComponent/ExampleComponent';
+import { SurveyPage } from '@internal/backstage-plugin-dxs/src/components/ExampleComponent/ExampleComponent';
+import { Question } from '@internal/backstage-plugin-dxs/src/components/ExampleComponent/Question';
 
 
 const app = createApp({
