@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles, Button, ListItem } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import LinearProgress from '@mui/material/LinearProgress';
-
 //progress bar
 export default function LinearDeterminate() {
     const [progress, setProgress] = React.useState(0);
@@ -48,5 +47,5 @@ export default function LinearDeterminate() {
         marginBottom: theme.spacing(2),
       },
     }));
-  
+
 

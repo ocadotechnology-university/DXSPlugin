@@ -31,9 +31,7 @@ export const SurveyPage = () => {
 
   const { value, loading, error } = useAsync(async() => {
     const response = await fetch(`${ await proxyBackendBaseUrl}/dxspage/${surveyid}`)
-
     const jsonData = await response.json();
-    
   }, [] );
   
   const goToPreviousPage = () => {
@@ -65,14 +63,9 @@ export const SurveyPage = () => {
 
 export const ExampleComponent = () => (
   <Page themeId="tool">
-    <Header title="Welcome to dxs!" subtitle="Optional subtitle">
-      <HeaderLabel label="Owner" value="Ocado Technology" />
-      <HeaderLabel label="Lifecycle" value="Alpha" />
-    </Header>
     <Content>
           <DxsProxyComponent />
     </Content>
   </Page>
 );
-
 

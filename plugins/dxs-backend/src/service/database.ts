@@ -73,7 +73,7 @@ export class DatabaseHandler {
         for (let i = 0; i < 28; i++) {
           await this.client('answers').insert({
               answer_id: i + 1 + (maxAnswerId.maxId || 0),
-              scale_response: 1,
+              scale_response: null,
               question_id: i + 1,
               comment: "",
               survey_id: (maxSurveyId.maxId || 0)+1
@@ -95,7 +95,7 @@ export class DatabaseHandler {
         });
         await this.client('answers').insert({
           answer_id: 31 + (maxAnswerId.maxId || 0),
-          scale_response: 1,
+          scale_response: null,
           question_id: 31,
           comment: "",
           survey_id: (maxSurveyId.maxId || 0)+1
@@ -108,7 +108,7 @@ export class DatabaseHandler {
       }
 
       // Return the surveys for the team 
-      const surveys = await this.client.select('*').from('surveys').where({ team_id: teamid });;
+      const surveys = await this.client.select('*').from('surveys');;
       return surveys;
     } catch (error) {
       console.error('Error fetching surveys:', error);
@@ -170,7 +170,7 @@ export class DatabaseHandler {
     }
   }
 
-  async getQuestion(surveyid: any, questionid: any) {
+  async getQuestion(surveyId: any, questionId: any) {
     try {
       const questions = await this.client
         .select('answers.*', 'categories.category_name', 'categories.notes', 'questions.content', 'surveys.team_id')
@@ -178,7 +178,7 @@ export class DatabaseHandler {
         .leftJoin('questions', 'answers.question_id', 'questions.question_id')
         .leftJoin('categories', 'questions.category_id', 'categories.category_id')
         .leftJoin('surveys', 'answers.survey_id', 'surveys.survey_id')
-        .where({ 'answers.survey_id': surveyid, 'answers.question_id': questionid });
+        .where({ 'answers.survey_id': surveyId, 'answers.question_id': questionId });
       return questions;
     } catch (error) {
       console.error('Error fetching question:', error);
@@ -197,8 +197,8 @@ export class DatabaseHandler {
       await this.client('answers')
         .where({ survey_id: surveyid, question_id: questionid })
         .update({
-          comment: comment,
           scale_response: scaleResponse,
+          comment: comment,
         });
 
       // Query the updated result and return it

@@ -132,10 +132,10 @@ VALUES (26, 8, 'Our team is spread enough, given everything we are responsible f
 INSERT INTO Questions (question_id, category_id, content)
 VALUES (27, 8, 'We make adequate number of tradeoffs.');
 INSERT INTO Questions (question_id, category_id, content)
-VALUES (28, 9, 'How productive do you feel on an average day?');
+VALUES (28, 9, 'How productive do you feel on an average day\?');
 INSERT INTO Questions (question_id, category_id, content)
-VALUES (29, 9, 'What would reduce friction in your day-to-day work?');
+VALUES (29, 9, 'What would reduce friction in your day-to-day work\?');
 INSERT INTO Questions (question_id, category_id, content)
-VALUES (30, 9, 'Anything else you want to share?');
+VALUES (30, 9, 'Anything else you want to share\?');
 INSERT INTO Questions (question_id, category_id, content)
 VALUES (31, 10, 'I''ve noticed changes based on the feedback from the last survey.');

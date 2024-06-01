@@ -61,10 +61,10 @@ export async function createRouter(
   });
 
   // Get survey's question by survey ID and question ID
-  router.get('/dxspage/:surveyid/:questionid', async (request, response) => {
+  router.get('/dxspage/:surveyId/:questionId', async (request, response) => {
     try{
-      const {surveyid, questionid} = request.params;
-      const surveyTable = await dbHandler.getQuestion(surveyid,questionid);
+      const {surveyId, questionId} = request.params;
+      const surveyTable = await dbHandler.getQuestion(surveyId,questionId);
 
       response.send(surveyTable);
     }catch (error) {
@@ -87,11 +87,11 @@ export async function createRouter(
 
   // Update a survey
   router.post('/update', async (request, response) => {
-    const { surveyid, question_id, scale_response, comment } = request.body;
+    const { surveyid, question_id, scaleResponse, comment } = request.body;
   
     try {
       // Log the received data
-      const responsed = await dbHandler.updateSurvey(surveyid, question_id, scale_response, comment);
+      const responsed = await dbHandler.updateSurvey(surveyid, question_id, scaleResponse, comment);
       response.send(responsed);
     } catch (error) {
       console.error('Error updating survey:', error);

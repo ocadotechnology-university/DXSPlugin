@@ -20,138 +20,127 @@ import useStyles from './styles';
 
 import Typography from '@mui/material/Typography';
 import { DefaultBodyType } from 'msw';
-let entity = '';
+import Question from './Question';
+
+export let entity = '';
 
 //main page
 const DxsProxyComponent = () => {  
-    const navigate = useNavigate();
-    const classes = useStyles();
-  
-    const discoveryAPI = useApi(discoveryApiRef);
-    const proxyBackendBaseUrl = discoveryAPI.getBaseUrl('dxs');
-  
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-    entity = useAsyncEntity().entity.metadata.name;
-  
-    const { value, loading, error } = useAsync(async() => {
+  const navigate = useNavigate();
+  const classes = useStyles();
+
+  const discoveryAPI = useApi(discoveryApiRef);
+  const proxyBackendBaseUrl = discoveryAPI.getBaseUrl('dxs');
+
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+  entity = useAsyncEntity().entity.metadata.name;
+
+  const { value, loading, error } = useAsync(async() => {
+    
+    let currentTeamId = -1;
+    const teamIdToNameMap = {};
+    const teamNamesResponse = await fetch(`${await proxyBackendBaseUrl}/teamname/${entity}`);
+    const teamNamesData = await teamNamesResponse.json();
+    teamNamesData.forEach((team: any ) => {
+            teamIdToNameMap[team.team_id] = team.team_name;
+            if(team.team_name === entity){
+              currentTeamId = team.team_id;
+            }
+            
+        });
       
-      let currentTeamId = -1;
-      const teamIdToNameMap = {};
-      const teamNamesResponse = await fetch(`${await proxyBackendBaseUrl}/teamname/${entity}`);
-      const teamNamesData = await teamNamesResponse.json();
-      teamNamesData.forEach((team: any ) => {
-              teamIdToNameMap[team.team_id] = team.team_name;
-              if(team.team_name === entity){
-                currentTeamId = team.team_id;
-              }
-              
-          });
-      const response = await fetch(`${ await proxyBackendBaseUrl}/surveys/${currentTeamId}`)
-      const jsonData = await response.json();
-      
-      /*/ Filter surveys by team name matching entity
-      const filteredData = jsonData.filter((survey: any) => {
-        const teamName = teamIdToNameMap[survey.team_id];
-        
-        return teamName === entity;
-      });*/
-      
-      const columns: TableColumn[] = [
-        {
-          title: 'Date',
-          field: 'date',
-          render: (row: any) => (
-            <>
-            {new Date(row.date).toLocaleString('en-US', { month: 'long', year: 'numeric' })}
-            </>
-        )},
-        {
-          title: 'Team ID',
-          field: 'team_id',
-          render: (row: any) => (
-            <>{row.team_id}</>
-        )
-        },
-        {
-          title: 'Status',
-          field: "status",
-          render: (row: any) => (
-            <Box display="flex" alignItems="center">
+    const response = await fetch(`${ await proxyBackendBaseUrl}/surveys/${currentTeamId}`)
+    const jsonData = await response.json();
+
+    const filteredData = jsonData.filter((survey: any) => {
+      const teamName = teamIdToNameMap[survey.team_id];
+      return teamName === entity;
+    });
+    
+    const columns: TableColumn[] = [
+      {
+        title: 'Date',
+        field: 'date',
+        render: (row: any) => (
+          <>
+          {new Date(row.date).toLocaleString('en-US', { month: 'long', year: 'numeric' })}
+          </>
+      )},
+      {
+        title: 'Team ID',
+        field: 'team_id',
+        render: (row: any) => (
+          <>{row.team_id}</>
+      )
+      },
+      {
+        title: 'Status',
+        field: "status",
+        render: (row: any) => (
+          <Box display="flex" alignItems="center">
+            {(currentMonth === new Date(row.date).getMonth() && currentYear === new Date(row.date).getFullYear()) ?
+              <StatusOK />
+             : 
+              <StatusAborted />
+            }
+            <Typography variant="body2">
               {(currentMonth === new Date(row.date).getMonth() && currentYear === new Date(row.date).getFullYear()) ?
-                <StatusOK />
-               : 
-                <StatusAborted />
+                "open"
+              : 
+                "closed"
               }
-              <Typography variant="body2">
-                {(currentMonth === new Date(row.date).getMonth() && currentYear === new Date(row.date).getFullYear()) ?
-                  "open"
-                : 
-                  "closed"
-                }
-              </Typography>
-            </Box>
-          ),
-        },
-        {
-          title: 'Options',
-          field: 'options',
-          render: (row: any) => (
-            <ListItem >
-              <div style={{ marginRight: '50px' }}>
-                <IconButton size="large" onClick={() => navigate(`/dxspage/${row.survey_id}/1`, { state: { navigationSource: "Browse" } })}>
-                  <VisibilityIcon/>
-                </IconButton>
-              </div>
-              {row.team_id === entity && currentMonth === new Date(row.date).getMonth() && currentYear === new Date(row.date).getFullYear() && (
-                <IconButton size="large" onClick={() => navigate(`/dxspage/${row.survey_id}/1`, { state: { navigationSource: "Edit" } })}>
-                  <EditIcon/>
-                </IconButton>
-              )}
-            </ListItem>
-          )
-          }];
-  
-          const filters: TableFilter[]= [
-            {
-              column: 'Team ID',
-              type: 'select',
-            },
-            {
-              column: 'Date',
-              type: 'multiple-select',
-            },
-          ];
-        
-  
-      // Sort filtered list of surveys
-      const data = jsonData.map((singleData: { survey_id: any; date: any; team_id: any; }) => {
-        return {
-          survey_id: singleData.survey_id,
-          date: new Date(singleData.date).toLocaleString('en-US', { month: 'long', year: 'numeric' }),
-          team_id: teamIdToNameMap[singleData.team_id],
-        };
-      }).sort((a, b) => new Date(b.date) - new Date(a.date));
-  
-      return (
-        <div className={classes.container}>
-          <Table
-            options={{ paging: false }}
-            data={data}
-            columns={columns}
-            filters={filters}
-          />
-        </div>
-      );
-      
-    }, [] );
-  
-    if (loading) {
-      return <Progress />;
-    } else if (error) {
-      return <Alert severity='error'/>;
-    }
-    return value;
+            </Typography>
+          </Box>
+        ),
+      },
+      {
+        title: 'Options',
+        field: 'options',
+        render: (row: any) => (
+          <ListItem >
+            <div style={{ marginRight: '50px' }}>
+              <IconButton size="large" onClick={() => navigate(`/dxspage/${row.survey_id}/1`, { state: { navigationSource: "Browse" } })}>
+                <VisibilityIcon/>
+              </IconButton>
+            </div>
+            {row.team_id === entity && currentMonth === new Date(row.date).getMonth() && currentYear === new Date(row.date).getFullYear() && (
+              <IconButton size="large" onClick={() => navigate(`/dxspage/${row.survey_id}/1`, { state: { navigationSource: "Edit" } })}>
+                <EditIcon/>
+              </IconButton>
+            )}
+          </ListItem>
+        )
+        }];
+
+    // Sort filtered list of surveys
+    const data = filteredData.map((singleData: { survey_id: any; date: any; team_id: any; }) => {
+      return {
+        survey_id: singleData.survey_id,
+        date: new Date(singleData.date).toLocaleString('en-US', { month: 'long', year: 'numeric' }),
+        team_id: teamIdToNameMap[singleData.team_id],
+      };
+    }).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    return (
+      <div className={classes.container}>
+        <Table
+          options={{ paging: false}}
+          data={data}
+          columns={columns}
+          title="Survey list"
+        />
+      </div>
+    );
+  }, []);
+
+  if (loading) {
+    return <Progress />;
+  } else if (error) {
+    return <Alert severity='error'/>;
   }
+  return value;
+}
+
   export default DxsProxyComponent;
