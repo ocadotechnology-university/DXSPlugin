@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { discoveryApiRef, useApi} from '@backstage/core-plugin-api';
 import { Button} from '@material-ui/core';
@@ -15,7 +15,7 @@ import { Alert } from '@material-ui/lab';
 import DxsProxyComponent from './DxsProxyComponent';
 import useStyles from './styles';
 import Question from './Question';
-let entity = '';
+import { entity1 } from './DxsProxyComponent';
 
 //survey page
 export const SurveyPage = () => {
@@ -32,11 +32,19 @@ export const SurveyPage = () => {
   const { value, loading, error } = useAsync(async() => {
     const response = await fetch(`${ await proxyBackendBaseUrl}/dxspage/${surveyid}`)
     const jsonData = await response.json();
+
+    const response1 = await fetch(`${ await proxyBackendBaseUrl}/getdate/${surveyid}`)
+    const jsonData1 = await response1.json();
+    return new Date(jsonData1.response[0].date).toLocaleString('en-US', { month: 'long', year: 'numeric' });
+
   }, [] );
+
+  const date = value;
   
   const goToPreviousPage = () => {
-    navigate(`/catalog/default/group/${entity}/dxs`); // Navigate to the previous page
+    navigate(`/catalog/default/group/${entity1}/dxs`); // Navigate to the previous page
   };
+
 
   if (loading) {
     return <Progress />;
@@ -45,7 +53,7 @@ export const SurveyPage = () => {
   }
   return (
     <Page themeId="tool">
-      <Header title="Survey page" subtitle={`${
+      <Header title={`Group ${entity1} / Date - ${date}`} subtitle={`${
           navigationSource === "Edit" ? "Editing" : "Browsing"
         } mode`}>
         <HeaderLabel label="Owner" value="Ocado Technology" />

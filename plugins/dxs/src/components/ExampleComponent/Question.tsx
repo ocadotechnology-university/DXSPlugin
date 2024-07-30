@@ -12,7 +12,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { c } from 'msw/lib/glossary-de6278a9';
-import {entity} from './DxsProxyComponent';
+import {entity1} from './DxsProxyComponent';
 
 //question
 export const Question = ({ surveyid, questionid }) => {
@@ -32,7 +32,7 @@ export const Question = ({ surveyid, questionid }) => {
   };
 
   const handleCommentChange = (e) => {
-    setComment(e.target.value.trim());
+    setComment(e);
   };
 
   //fetching data
@@ -95,7 +95,7 @@ export const Question = ({ surveyid, questionid }) => {
   //next and prev buttons
   const finishSurvey = async () => {
     updateSurveyData(surveyid, questionid, scaleResponse, comment);
-    navigate(`/catalog/default/group/${entity}/dxs`);
+    navigate(`/catalog/default/group/${entity1}/dxs`);
   };
   const goToNextQuestion = async () => {
     updateSurveyData(surveyid, questionid, scaleResponse, comment);
@@ -169,7 +169,15 @@ export const Question = ({ surveyid, questionid }) => {
 
               <Divider textAlign="center"></Divider>
 
-              <p style={{ fontSize: "30px", textAlign: "center"}}> {scaleResponse === null ? "to be answered.." : scaleResponse || data.scale_response}</p>
+              {(parseInt(questionid) !== 29 && parseInt(questionid) !== 30) && (
+                <p style={{ 
+                    fontSize: "25px", 
+                    textAlign: "center",
+                    color: scaleResponse === null ? "red" : "white"
+                  }}>
+                  {scaleResponse === null ? "to be answered.." : scaleResponse || data.scale_response}
+                </p>
+              )}
               
               {(parseInt(questionid) !== 29 && parseInt(questionid) !== 30) && (
               <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px"}}>
@@ -207,7 +215,7 @@ export const Question = ({ surveyid, questionid }) => {
                 onInputCapture={(e) => {
                   setComment(e.target.value.trim())
                   //console.log(e.target.value.trim());
-                  handleCommentChange;}}
+                  handleCommentChange(e.target.value);}}
               />
               :
               <TextField multiline fullWidth disabled  id="comment" value={data.comment || ''} // Provide a default value if data.comment is empty

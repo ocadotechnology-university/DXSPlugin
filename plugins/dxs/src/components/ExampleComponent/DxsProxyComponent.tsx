@@ -21,8 +21,7 @@ import useStyles from './styles';
 import Typography from '@mui/material/Typography';
 import { DefaultBodyType } from 'msw';
 import Question from './Question';
-
-export let entity = '';
+let entity1 = '';
 
 //main page
 const DxsProxyComponent = () => {  
@@ -31,21 +30,20 @@ const DxsProxyComponent = () => {
 
   const discoveryAPI = useApi(discoveryApiRef);
   const proxyBackendBaseUrl = discoveryAPI.getBaseUrl('dxs');
-
+  entity1 = useAsyncEntity().entity.metadata.name;
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
-  entity = useAsyncEntity().entity.metadata.name;
 
   const { value, loading, error } = useAsync(async() => {
     
     let currentTeamId = -1;
     const teamIdToNameMap = {};
-    const teamNamesResponse = await fetch(`${await proxyBackendBaseUrl}/teamname/${entity}`);
+    const teamNamesResponse = await fetch(`${await proxyBackendBaseUrl}/teamname/${entity1}`);
     const teamNamesData = await teamNamesResponse.json();
     teamNamesData.forEach((team: any ) => {
             teamIdToNameMap[team.team_id] = team.team_name;
-            if(team.team_name === entity){
+            if(team.team_name === entity1){
               currentTeamId = team.team_id;
             }
             
@@ -56,7 +54,7 @@ const DxsProxyComponent = () => {
 
     const filteredData = jsonData.filter((survey: any) => {
       const teamName = teamIdToNameMap[survey.team_id];
-      return teamName === entity;
+      return teamName === entity1;
     });
     
     const columns: TableColumn[] = [
@@ -105,7 +103,7 @@ const DxsProxyComponent = () => {
                 <VisibilityIcon/>
               </IconButton>
             </div>
-            {row.team_id === entity && currentMonth === new Date(row.date).getMonth() && currentYear === new Date(row.date).getFullYear() && (
+            {row.team_id === entity1 && currentMonth === new Date(row.date).getMonth() && currentYear === new Date(row.date).getFullYear() && (
               <IconButton size="large" onClick={() => navigate(`/dxspage/${row.survey_id}/1`, { state: { navigationSource: "Edit" } })}>
                 <EditIcon/>
               </IconButton>
@@ -141,6 +139,6 @@ const DxsProxyComponent = () => {
     return <Alert severity='error'/>;
   }
   return value;
-}
-
+}  
+  export  {entity1};
   export default DxsProxyComponent;

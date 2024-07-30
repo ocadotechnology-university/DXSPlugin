@@ -99,6 +99,12 @@ export async function createRouter(
     }
   });
 
+  router.get('/getdate/:surveyid', async (request, response) => {
+    const {surveyid} = request.params;
+    const value = await dbHandler.getDate(surveyid);
+    response.send({response: value});
+  });
+
   // Delete a survey
   router.delete('/surveys/:surveyid', async (request, response) => {
     const { surveyid } = request.params;

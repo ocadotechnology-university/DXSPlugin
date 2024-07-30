@@ -192,6 +192,16 @@ export class DatabaseHandler {
       .del();
   }
 
+  async getDate(surveyId: any) {
+    try {
+      const questions = await this.client.select('*').from('surveys').where({survey_id: surveyId});
+      return questions;
+    } catch (error) {
+      console.error('Error fetching question:', error);
+      throw error;
+    }
+  }
+
   async updateSurvey(surveyid: string, questionid: string, scaleResponse: number, comment: string) {
     try {
       await this.client('answers')
